@@ -17,3 +17,6 @@
     border-radius: 18px;
     margin-top: 20px;
 }
+
+/* Floating ambient music control */
+.ambient-toggle{position:fixed;z-index:50;bottom:22px;right:22px;display:flex;align-items:center;gap:11px;padding:11px 14px;border:1px solid rgba(143,172,255,.28);border-radius:999px;background:rgba(13,16,24,.88);backdrop-filter:blur(14px);color:#e7edff;font:600 11px var(--font-body);cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.28);transition:transform .25s,border-color .25s}.ambient-toggle:hover{transform:translateY(-3px);border-color:rgba(143,172,255,.55)}.ambient-icon{font-size:18px;color:#a9c4ff}.ambient-state{font-size:8px;letter-spacing:1px;color:#8d98ae;border-left:1px solid var(--line);padding-left:10px}.ambient-toggle[aria-pressed=true]{border-color:rgba(135,165,255,.65);box-shadow:0 0 24px rgba(91,126,227,.15)}.ambient-toggle[aria-pressed=true] .ambient-state{color:#a9c4ff}@media(max-width:760px){.ambient-toggle{bottom:14px;right:14px;padding:10px 12px}}
