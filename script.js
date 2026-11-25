@@ -80,3 +80,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+// Gentle original ambient pad synthesized locally (no external audio or copyrighted recording).
+(() => {
+  const button = document.getElementById('ambient-toggle');
+  if (!button) return;
+  let context, master, oscillators = [], active = false;
+  const stop = () => {
+    if (!context || !active) return;
+    active = false;
+    master.gain.cancelScheduledValues(context.currentTime);
+    master.gain.setTargetAtTime(0, context.currentTime, 0.35);
+    const old = oscillators.slice(); oscillators = [];
+    window.setTimeout(() => old.forEach(o => { try { o.stop(); } catch(e) {} }), 1200);
+  };
+  const start = async () => {
+    if (!context) {
+      context = new (window.AudioContext || window.webkitAudioContext)();
+      master = context.createGain(); master.gain.value = 0;
+      const filter = context.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 850;
+      filter.connect(master); master.connect(context.destination);
+      [174.61, 220, 261.63, 329.63].forEach((freq, i) => {
+        const osc = context.createOscillator(), gain = context.createGain();
+        osc.type = i === 0 ? 'sine' : 'triangle'; osc.frequency.value = freq;
+        gain.gain.value = [0.18,0.10,0.08,0.035][i]; osc.connect(gain); gain.connect(filter); osc.start(); oscillators.push(osc);
+      });
+    }
+    await context.resume(); active = true;
+    master.gain.cancelScheduledValues(context.currentTime); master.gain.setTargetAtTime(0.16, context.currentTime, 0.8);
+  };
+  button.addEventListener('click', async () => {
+    if (active) stop(); else await start();
+    button.setAttribute('aria-pressed', String(active));
+    button.querySelector('.ambient-state').textContent = active ? 'ON' : 'OFF';
+    button.setAttribute('aria-label', active ? 'Pause ambient music' : 'Play ambient music');
+  });
+})();
